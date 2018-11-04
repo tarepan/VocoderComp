@@ -6,6 +6,7 @@ import librosa
 from scipy.io.wavfile import read
 
 from .WORLD import TestWORLD
+from .STFT_iSTFT import testSTFTiSTFT
 
 def contest(process, waveform, sr, *args):
     """
@@ -24,10 +25,14 @@ def compare():
     waveform, sr_librosa = librosa.load(filepath, sr=sr_acquired, mono = True, dtype="float64")
     assert sr_acquired == sr_librosa
 
-    librosa.output.write_wav("./results/origin.wav", waveform.astype("float32"), sr_librosa)
-
-    # print(waveform)
+    # comparison
     WORLD_wave, WORLD_time = contest(TestWORLD, waveform, sr_librosa)
+    pureSTFT_wave, pureSTFT_time = contest(testSTFTiSTFT, waveform, sr_librosa)
 
-    librosa.output.write_wav("./results/re.wav", WORLD_wave.astype("float32"), sr_librosa)
+    # save origin and reconstructed
+    librosa.output.write_wav("./results/origin.wav", waveform.astype("float32"), sr_librosa)
+    librosa.output.write_wav("./results/world.wav", WORLD_wave.astype("float32"), sr_librosa)
+    librosa.output.write_wav("./results/pureSTFT.wav", pureSTFT_wave.astype("float32"), sr_librosa)
+    print(f"time WORLD: {WORLD_time}")
+    print(f"time pureSTFT: {pureSTFT_time}")
     return None
