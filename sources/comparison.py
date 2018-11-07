@@ -6,7 +6,7 @@ import librosa
 from scipy.io.wavfile import read
 
 from .WORLD import TestWORLD
-from .STFT_iSTFT import testSTFTiSTFT
+from .STFT_iSTFT import testSTFT_iSTFT, testSTFTspectrogram_iSTFT
 
 def contest(process, waveform, sr, *args):
     """
@@ -27,12 +27,16 @@ def compare():
 
     # comparison
     WORLD_wave, WORLD_time = contest(TestWORLD, waveform, sr_librosa)
-    pureSTFT_wave, pureSTFT_time = contest(testSTFTiSTFT, waveform, sr_librosa)
+    spectrogramNoise_wave, spectrogramNoise_time = contest(testSTFTspectrogram_iSTFT, waveform, sr_librosa, "Noise")
+    spectrogramZero_wave, spectrogramZero_time = contest(testSTFTspectrogram_iSTFT, waveform, sr_librosa, "Zero")
+    pureSTFT_wave, pureSTFT_time = contest(testSTFT_iSTFT, waveform, sr_librosa)
 
     # save origin and reconstructed
     librosa.output.write_wav("./results/origin.wav", waveform.astype("float32"), sr_librosa)
     librosa.output.write_wav("./results/world.wav", WORLD_wave.astype("float32"), sr_librosa)
     librosa.output.write_wav("./results/pureSTFT.wav", pureSTFT_wave.astype("float32"), sr_librosa)
+    librosa.output.write_wav("./results/spectrogram_noise.wav", spectrogramNoise_wave.astype("float32"), sr_librosa)
+    librosa.output.write_wav("./results/spectrogram_zero.wav", spectrogramZero_wave.astype("float32"), sr_librosa)
     print(f"time WORLD: {WORLD_time}")
     print(f"time pureSTFT: {pureSTFT_time}")
     return None
