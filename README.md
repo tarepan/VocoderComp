@@ -14,3 +14,7 @@ VocoderComp is simple performance comparison of Vocoders (and waveform transform
 # Results
 
 # How to run tests by yourself
+
+# License of data
+**original_data** are from **声優統計コーパス** and **nico-opendata 音声読み上げデータセット**.  
+Data from these datasets are protected under each dataset's license (This repository follows the licenses).  
